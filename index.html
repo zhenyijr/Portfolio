@@ -8,12 +8,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8E4DA'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%23C42A22' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23E4F0DC'/%3E%3Cpath d='M15.8 28c.3-5.8.4-9.6.1-12.8' fill='none' stroke='%23203328' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M15.8 17C8 17 4.8 12.8 5.5 6.2c6.7.3 10.2 3.3 10.3 10.8Zm.3-1.2c.4-7.2 4-11.5 10.5-12.6.8 7-2.6 11.3-10.5 12.6Z' fill='%233E8065'/%3E%3C/svg%3E">
 <style>
   :root{
-    --paper:#F1F5E8;        /* soft field-note green */
-    --paper-2:#E3EBD8;      /* leafy inset surface */
-    --paper-3:#D0DEC6;      /* deeper sage rules */
+    --paper:#E4F0DC;        /* soft leafy field-note green */
+    --paper-2:#D8E9D1;      /* leafy inset surface */
+    --paper-3:#C8DDC2;      /* deeper sage rules */
     --ink:#203328;          /* forest-label ink */
     --ink-soft:#526657;     /* secondary text */
     --ink-faint:#829486;    /* captions, meta */
@@ -117,7 +117,7 @@
     font-size:.78rem;font-weight:600;letter-spacing:.03em;color:var(--risk);
     display:flex;align-items:center;gap:9px;margin:0 0 18px;
   }
-  .kicker .dot{width:9px;height:9px;border-radius:50%;background:var(--risk);flex:none;box-shadow:0 0 0 4px rgba(196,42,34,.14)}
+  .kicker .dot{width:9px;height:9px;border-radius:50%;background:var(--risk);flex:none;box-shadow:0 0 0 4px rgba(62,128,101,.16)}
   h2.head{
     margin:0 0 .28em;max-width:15ch;
     font-size:clamp(2.5rem,1.6rem + 4.4vw,4.6rem);line-height:1.02;letter-spacing:-.012em;
@@ -278,9 +278,10 @@
   <header class="masthead">
     <a class="brand" href="#work" data-tab="work" aria-label="Zhenyi Tsai — home">
       <svg class="mark" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
-        <circle cx="15" cy="15" r="11" fill="none" stroke="var(--risk)" stroke-width="2.4"/>
-        <path d="M15 4 L15 26 M4 15 L26 15" stroke="var(--ink)" stroke-width="1.1" opacity=".55"/>
-        <circle cx="15" cy="15" r="2.4" fill="var(--risk)"/>
+        <circle cx="15" cy="15" r="13" fill="var(--paper-2)" stroke="var(--glacier)" stroke-width="1.5"/>
+        <path d="M15.1 26c.2-4.8.3-7.9.1-11.1" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M15.2 16.2C8.6 16.1 5.7 12.6 6.2 7c5.8.3 8.8 3.1 9 9.2Zm.2-1c.4-6.1 3.4-9.7 8.8-10.6.7 5.9-2.2 9.4-8.8 10.6Z" fill="var(--glacier)"/>
+        <path d="M15 17.1c-2.7-1.4-4.3-3.3-4.8-5.7 3.3.5 4.9 2.1 4.8 5.7Z" fill="var(--mauve)" opacity=".9"/>
       </svg>
       <span>
         <h1>Zhenyi Tsai</h1>

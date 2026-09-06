@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zhenyi Tsai — Geographer</title>
+<meta name="description" content="Zhenyi Tsai — geographer and environmental scientist. GIS, climate-risk mapping, and fieldwork across the Himalaya and Tibetan Plateau.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8E4DA'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%23C42A22' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --paper:#E8E4DA;        /* cool terrain-grey paper, from the hillshade basemap */
+    --paper-2:#DFDACD;      /* inset surface */
+    --paper-3:#D4CEBE;      /* deeper inset / rules */
+    --ink:#23211B;          /* map-label ink */
+    --ink-soft:#5B564A;     /* secondary text */
+    --ink-faint:#8A8474;    /* captions, meta */
+    --risk:#C42A22;         /* High-risk crimson — the one bold accent */
+    --risk-deep:#9E2019;
+    --glacier:#2E7C6E;      /* glacier teal — links, quiet accents */
+    --mauve:#6E5F86;        /* population-density mauve — exposure chapter */
+    --amber:#CF8A1E;        /* medium-risk amber — legend dots only */
+    --line:#C4BDAC;         /* hairlines */
+    --measure:66ch;
+    --spine:96px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Fraunces",Georgia,serif;
+    font-optical-sizing:auto;
+    font-variation-settings:"opsz" 24,"wght" 400,"SOFT" 20,"WONK" 0;
+    font-size:clamp(1.02rem,0.96rem + 0.3vw,1.16rem);
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  /* faint paper grain — tactile, not a gradient */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection{background:rgba(196,42,34,.16)}
+  a{color:inherit}
+
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+
+  /* ---------- Masthead ---------- */
+  .masthead{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+    padding:clamp(22px,4vw,40px) 0 18px;
+  }
+  .brand{display:flex;align-items:baseline;gap:14px;text-decoration:none}
+  .brand .mark{flex:none;margin-bottom:2px}
+  .brand h1{
+    margin:0;font-size:clamp(1.35rem,1.1rem + 1vw,1.9rem);letter-spacing:.005em;
+    font-variation-settings:"opsz" 60,"wght" 560,"SOFT" 0,"WONK" 1;
+  }
+  .brand .role{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:.74rem;letter-spacing:.02em;color:var(--ink-soft);font-weight:500;
+    margin-top:.35em;
+  }
+
+  /* ---------- Tabs ---------- */
+  nav.tabs{display:flex;flex-wrap:wrap;gap:6px}
+  .tab{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:.9rem;font-weight:600;letter-spacing:.01em;
+    color:var(--ink-soft);background:none;border:0;cursor:pointer;
+    padding:8px 2px 10px;margin:0 12px;position:relative;
+    transition:color .18s ease;
+  }
+  .tab:first-child{margin-left:0}
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{color:var(--ink)}
+  .tab[aria-selected="true"]::after{
+    content:"";position:absolute;left:-3px;right:-3px;bottom:2px;height:9px;z-index:-1;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 22 3, 44 8, 66 5 S 104 3, 118 6' fill='none' stroke='%23C42A22' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
+  }
+  .tab:focus-visible{outline:2.5px solid var(--glacier);outline-offset:3px;border-radius:2px}
+
+  .topline{height:1px;background:var(--line);margin-bottom:clamp(30px,6vw,64px)}
+
+  /* ---------- Layout spine ---------- */
+  .sheet{display:grid;grid-template-columns:var(--spine) 1fr;gap:0;align-items:start}
+  .spine{
+    position:sticky;top:18px;align-self:start;
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    color:var(--ink-faint);font-size:.7rem;letter-spacing:.04em;
+    border-right:1px solid var(--line);padding-right:16px;min-height:200px;
+  }
+  .spine .idx{font-variant-numeric:tabular-nums;display:block;color:var(--ink-soft);font-weight:600}
+  .spine .vrun{
+    writing-mode:vertical-rl;transform:rotate(180deg);margin-top:14px;
+    color:var(--ink-faint);letter-spacing:.14em;
+  }
+  .col{padding-left:clamp(20px,4vw,56px);min-width:0}
+
+  /* ---------- Panels ---------- */
+  .panel{display:none;animation:none}
+  .panel:focus{outline:none}
+  .panel.is-active{display:block}
+  @media (prefers-reduced-motion:no-preference){
+    .panel.is-active{animation:rise .5s cubic-bezier(.2,.7,.3,1) both}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  }
+
+  /* ---------- Hero (Work) ---------- */
+  .kicker{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:.78rem;font-weight:600;letter-spacing:.03em;color:var(--risk);
+    display:flex;align-items:center;gap:9px;margin:0 0 18px;
+  }
+  .kicker .dot{width:9px;height:9px;border-radius:50%;background:var(--risk);flex:none;box-shadow:0 0 0 4px rgba(196,42,34,.14)}
+  h2.head{
+    margin:0 0 .28em;max-width:15ch;
+    font-size:clamp(2.5rem,1.6rem + 4.4vw,4.6rem);line-height:1.02;letter-spacing:-.012em;
+    font-variation-settings:"opsz" 144,"wght" 430,"SOFT" 0,"WONK" 1;
+  }
+  .lead{max-width:var(--measure);color:var(--ink-soft);font-size:clamp(1.1rem,1rem + .5vw,1.32rem);line-height:1.55}
+  .lead .circled{position:relative;white-space:nowrap}
+  .lead .circled svg{position:absolute;left:-8px;right:-8px;top:-6px;width:calc(100% + 16px);height:calc(100% + 12px);overflow:visible;pointer-events:none}
+  .lead .circled path{fill:none;stroke:var(--risk);stroke-width:2.4;stroke-linecap:round}
+  @media (prefers-reduced-motion:no-preference){
+    .js-anim .lead .circled path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1s ease .5s forwards}
+    @keyframes draw{to{stroke-dashoffset:0}}
+  }
+
+  /* stats */
+  .stats{display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,52px);margin:38px 0 12px;padding-top:26px;border-top:1px solid var(--line)}
+  .stat{min-width:96px}
+  .stat b{
+    display:block;font-size:clamp(2rem,1.4rem + 2.4vw,3.1rem);line-height:1;letter-spacing:-.02em;
+    font-variation-settings:"opsz" 144,"wght" 500,"SOFT" 0,"WONK" 0;font-variant-numeric:tabular-nums;
+  }
+  .stat span{
+    display:block;margin-top:.6em;font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:.76rem;line-height:1.4;color:var(--ink-soft);max-width:20ch;font-weight:500;
+  }
+
+  /* ---------- Figures / plates ---------- */
+  figure.plate{margin:clamp(40px,7vw,84px) 0 0}
+  .plate img{display:block;width:100%;height:auto;border:1px solid var(--line);background:var(--paper-2)}
+  .plate figcaption{display:flex;gap:16px;margin-top:14px;max-width:var(--measure)}
+  .fignum{
+    flex:none;font-family:"Hanken Grotesk",system-ui,sans-serif;font-weight:700;
+    font-size:.72rem;letter-spacing:.02em;color:var(--paper);background:var(--ink);
+    padding:3px 8px;height:max-content;border-radius:2px;font-variant-numeric:tabular-nums;
+  }
+  .fignum.r{background:var(--risk)} .fignum.t{background:var(--glacier)} .fignum.m{background:var(--mauve)}
+  figcaption .cap{font-style:italic;color:var(--ink-soft);font-size:.98rem;line-height:1.5;font-variation-settings:"opsz" 40,"wght" 400,"SOFT" 40}
+  figcaption .cap em{font-style:normal;color:var(--ink)}
+
+  .prose{max-width:var(--measure);margin:clamp(34px,6vw,60px) 0 0}
+  .prose p{margin:0 0 1.05em}
+  .prose p+p{text-indent:0}
+  .prose .drop::first-letter{
+    initial-letter:2.6;-webkit-initial-letter:2.6;font-variation-settings:"opsz" 144,"wght" 500,"WONK" 1;
+    color:var(--risk);margin-right:.09em;font-style:normal;
+  }
+  h3.sub{
+    margin:clamp(46px,7vw,72px) 0 6px;font-size:clamp(1.5rem,1.2rem + 1.2vw,2rem);letter-spacing:-.01em;
+    font-variation-settings:"opsz" 90,"wght" 500,"SOFT" 0,"WONK" 1;max-width:22ch;
+  }
+  .sublabel{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.74rem;font-weight:600;
+    letter-spacing:.02em;color:var(--ink-faint);margin-bottom:2px;
+  }
+  .sublabel.r{color:var(--risk)} .sublabel.t{color:var(--glacier)} .sublabel.m{color:var(--mauve)}
+
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,30px);margin-top:clamp(40px,7vw,84px)}
+  .pair figure{margin:0}
+  .pair .plate figcaption{max-width:none}
+
+  .note{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.82rem;line-height:1.55;
+    color:var(--ink-soft);background:var(--paper-2);border-left:3px solid var(--glacier);
+    padding:14px 18px;margin:clamp(34px,6vw,56px) 0 0;max-width:var(--measure);
+  }
+  .note b{color:var(--ink);font-weight:600}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr;gap:8px}
+  .about-lead{
+    font-size:clamp(1.5rem,1.15rem + 1.6vw,2.3rem);line-height:1.28;letter-spacing:-.01em;
+    max-width:24ch;margin:0 0 .7em;
+    font-variation-settings:"opsz" 110,"wght" 420,"SOFT" 10,"WONK" 1;
+  }
+  .about-body{max-width:var(--measure)}
+  .about-body p{margin:0 0 1.1em}
+  .marginalia{margin:clamp(40px,6vw,60px) 0 0;display:grid;gap:22px}
+  .mnote{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;max-width:var(--measure)}
+  .mnote .tick{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.02em;
+    color:var(--risk);padding-top:.25em;white-space:nowrap;
+  }
+  .mnote p{margin:0;font-size:.98rem;color:var(--ink-soft)}
+  .mnote b{color:var(--ink);font-weight:600;font-variation-settings:"wght" 560}
+
+  /* ---------- Résumé ---------- */
+  .cv-top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:8px}
+  .btn{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.82rem;font-weight:600;
+    text-decoration:none;color:var(--paper);background:var(--ink);padding:10px 16px;border-radius:3px;
+    display:inline-flex;align-items:center;gap:9px;transition:background .18s ease;
+  }
+  .btn:hover{background:var(--risk)}
+  .btn svg{flex:none}
+  .cvblock{border-top:1px solid var(--line);padding:22px 0;display:grid;grid-template-columns:150px 1fr;gap:clamp(14px,3vw,40px)}
+  .cvblock>h4{
+    margin:0;font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.76rem;font-weight:700;
+    letter-spacing:.03em;color:var(--ink-faint);padding-top:.3em;
+  }
+  .cvitem{margin:0 0 22px}
+  .cvitem:last-child{margin-bottom:0}
+  .cvitem .r1{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+  .cvitem h5{margin:0;font-size:1.12rem;font-variation-settings:"opsz" 40,"wght" 560,"WONK" 1}
+  .cvitem .when{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.76rem;color:var(--ink-faint);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .cvitem .org{color:var(--ink-soft);font-style:italic;font-size:.98rem;margin:.1em 0 .5em}
+  .cvitem ul{margin:.2em 0 0;padding-left:1.1em}
+  .cvitem li{margin:.28em 0;font-size:.96rem;color:var(--ink-soft);line-height:1.5}
+  .cvitem li::marker{color:var(--risk)}
+  .taglist{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.8rem;color:var(--ink);
+    border:1px solid var(--line);background:var(--paper-2);padding:5px 11px;border-radius:20px;
+  }
+  .tag.cert{border-color:var(--glacier);color:var(--glacier)}
+
+  /* ---------- Writing ---------- */
+  .writing-list{margin:clamp(30px,5vw,50px) 0 0;border-top:1px solid var(--line)}
+  .witem{display:block;padding:26px 0;border-bottom:1px solid var(--line);text-decoration:none;transition:padding .2s ease}
+  a.witem:hover{padding-left:12px}
+  .witem .wtype{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.03em;color:var(--ink-faint);margin-bottom:7px}
+  .witem .wtype.r{color:var(--risk)} .witem .wtype.t{color:var(--glacier)} .witem .wtype.m{color:var(--mauve)}
+  .witem .wtitle{font-size:clamp(1.32rem,1.1rem + .8vw,1.72rem);line-height:1.14;letter-spacing:-.005em;font-variation-settings:"opsz" 70,"wght" 550,"SOFT" 0,"WONK" 1}
+  .witem .warr{font-size:.7em;color:var(--ink-faint);margin-left:.3em;transition:color .2s ease}
+  a.witem:hover .wtitle{color:var(--risk)} a.witem:hover .warr{color:var(--risk)}
+  .witem .wmeta{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.8rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;margin:.55em 0}
+  .witem .wdesc{max-width:62ch;color:var(--ink-soft);font-size:1rem;line-height:1.5;font-style:italic;font-variation-settings:"opsz" 40,"wght" 400,"SOFT" 30}
+  a.witem:focus-visible{outline:2.5px solid var(--glacier);outline-offset:3px}
+
+  /* ---------- Contact ---------- */
+  .contact-head{
+    font-size:clamp(2.2rem,1.4rem + 3.6vw,4rem);line-height:1.05;letter-spacing:-.012em;max-width:16ch;margin:0 0 .5em;
+    font-variation-settings:"opsz" 144,"wght" 430,"SOFT" 0,"WONK" 1;
+  }
+  .contact-lead{max-width:var(--measure);color:var(--ink-soft);font-size:1.16rem;margin-bottom:38px}
+  .contact-list{display:grid;gap:2px;max-width:640px;border-top:1px solid var(--line)}
+  .crow{
+    display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;
+    padding:18px 0;border-bottom:1px solid var(--line);text-decoration:none;
+  }
+  .crow .k{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.74rem;font-weight:600;letter-spacing:.03em;color:var(--ink-faint)}
+  .crow .v{font-size:1.16rem;font-variation-settings:"opsz" 40,"wght" 480,"WONK" 1}
+  a.crow{transition:padding .2s ease,color .2s ease}
+  a.crow:hover{padding-left:10px}
+  a.crow:hover .v{color:var(--risk)}
+  a.crow:focus-visible{outline:2.5px solid var(--glacier);outline-offset:3px}
+
+  footer{margin:clamp(60px,10vw,120px) 0 0;padding:26px 0 46px;border-top:1px solid var(--line)}
+  .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;
+    font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.76rem;color:var(--ink-faint)}
+  .foot a{color:var(--glacier);text-decoration:none}
+  .foot a:hover{text-decoration:underline}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:720px){
+    .sheet{grid-template-columns:1fr}
+    .spine{position:static;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px;margin-bottom:26px;min-height:0;display:flex;gap:16px;align-items:baseline}
+    .spine .vrun{writing-mode:horizontal-tb;transform:none;margin:0}
+    .col{padding-left:0}
+    .pair{grid-template-columns:1fr}
+    .cvblock{grid-template-columns:1fr;gap:10px}
+    .cvblock>h4{padding-top:0}
+    .masthead{flex-direction:column;align-items:flex-start;gap:16px}
+    nav.tabs{margin-left:-2px}
+  }
+  @media (max-width:400px){ .tab{margin:0 8px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <a class="brand" href="#work" data-tab="work" aria-label="Zhenyi Tsai — home">
+      <svg class="mark" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+        <circle cx="15" cy="15" r="11" fill="none" stroke="var(--risk)" stroke-width="2.4"/>
+        <path d="M15 4 L15 26 M4 15 L26 15" stroke="var(--ink)" stroke-width="1.1" opacity=".55"/>
+        <circle cx="15" cy="15" r="2.4" fill="var(--risk)"/>
+      </svg>
+      <span>
+        <h1>Zhenyi Tsai</h1>
+        <span class="role">Geographer and environmental scientist</span>
+      </span>
+    </a>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" id="tab-work"    aria-controls="work"    data-tab="work"    aria-selected="true">Work</button>
+      <button class="tab" role="tab" id="tab-writing" aria-controls="writing" data-tab="writing" aria-selected="false">Writing</button>
+      <button class="tab" role="tab" id="tab-about"   aria-controls="about"   data-tab="about"   aria-selected="false">About</button>
+      <button class="tab" role="tab" id="tab-resume"  aria-controls="resume"  data-tab="resume"  aria-selected="false">Résumé</button>
+      <button class="tab" role="tab" id="tab-contact" aria-controls="contact" data-tab="contact" aria-selected="false">Contact</button>
+    </nav>
+  </header>
+  <div class="topline"></div>
+
+  <!-- ============ WORK ============ -->
+  <section class="panel is-active" id="work" role="tabpanel" aria-labelledby="tab-work" tabindex="-1">
+    <div class="sheet">
+      <aside class="spine" aria-hidden="true">
+        <span class="idx">01 — 04</span>
+        <span class="vrun">Selected work</span>
+      </aside>
+      <div class="col">
+
+        <p class="kicker"><span class="dot"></span>Glacial lake outburst flood screening, Nepal's Koshi Basin</p>
+        <h2 class="head">Mapping who lives in the path of a glacial flood</h2>
+        <p class="lead">A screening model for glacial lake outburst floods across Nepal's Koshi Basin — narrowing
+          <span class="circled">two thousand lakes<svg viewBox="0 0 220 40" preserveAspectRatio="none" aria-hidden="true"><path d="M12 20 C 40 6, 96 6, 150 10 C 196 14, 214 20, 206 26 C 196 34, 120 36, 66 33 C 22 30, 6 26, 14 18" style="--len:640"/></svg></span>
+          down to the settlements, and the people, who would be standing downstream.</p>
+
+        <div class="stats">
+          <div class="stat"><b>~2,000</b><span>glacial lakes screened across the basin</span></div>
+          <div class="stat"><b>79</b><span>flagged high-risk on three factors</span></div>
+          <div class="stat"><b>69%</b><span>match with ICIMOD's field inventory</span></div>
+          <div class="stat"><b>10,808</b><span>people within a 5&nbsp;km danger zone</span></div>
+        </div>
+
+        <figure class="plate">
+          <img src="risk.jpg" width="1920" height="1228" alt="Risk map of the Koshi Basin showing roughly 2,000 glacial lakes scored for outburst-flood risk, with high-risk lakes in red clustered along the glaciated spine of the Himalaya.">
+          <figcaption><span class="fignum r">Fig. 01</span><span class="cap"><em>The screening model.</em> Each lake scored on dam type, surface area, and proximity to glacier ice — the three factors most tied to historical outburst events. High-risk lakes cluster along the glaciated spine, in the Everest, Rolwaling, and Arun sub-basins.</span></figcaption>
+        </figure>
+
+        <div class="prose">
+          <p class="drop">A glacial lake outburst flood begins where ice, meltwater, and a fragile natural dam meet. Across the Koshi Basin, roughly two thousand lakes sit in that arrangement — and only a handful will ever fail. The problem is not a shortage of lakes to worry about; it is knowing which ones, and who sits below them.</p>
+          <p>This project builds a lightweight, repeatable way to triage that question. Rather than model every lake in exhaustive detail, it scores all of them on the three variables that most reliably separate the dangerous from the benign, then carries the survivors through validation, proximity exposure, and downstream flood-path analysis — the same path a hazard analyst would walk, made legible on a map.</p>
+        </div>
+
+        <p class="sublabel t">Establishing the ground</p>
+        <h3 class="sub">A basin of extremes, from Everest to the plains</h3>
+        <figure class="plate">
+          <img src="overview.jpg" loading="lazy" width="1920" height="1650" alt="Overview map of the Koshi Basin spanning from the high Himalaya into the Bihar plains, showing population density, glacier extent, recorded GLOF events from 1920 to 2020, and the 5 km buffer danger zone.">
+          <figcaption><span class="fignum t">Fig. 02</span><span class="cap"><em>Basin overview.</em> The Koshi drains from the highest ground on earth into some of the most densely settled plains in South Asia. Recorded outburst events from 1920–2020 anchor the model in a real history of failure.</span></figcaption>
+        </figure>
+
+        <p class="sublabel r" style="margin-top:clamp(46px,7vw,72px)">Does the model hold up?</p>
+        <h3 class="sub" style="margin-top:6px">Checking a fast model against a careful one</h3>
+        <div class="prose" style="margin-top:22px">
+          <p>A screening model is only as trustworthy as its agreement with slower, field-based work. Validated against ICIMOD's authoritative inventory of 42 potentially dangerous glacial lakes, the three-factor model recovered 29 of them — including the two Rank-I benchmarks, Imja and Tsho Rolpa. For a method this lightweight, a 69% catch is a strong result, and the disagreements are useful in their own right: they mark exactly where rapid screening and detailed assessment diverge.</p>
+        </div>
+        <figure class="plate">
+          <img src="validation.jpg" loading="lazy" width="1920" height="1228" alt="Validation map overlaying the model's high-risk lakes on ICIMOD's inventory of potentially dangerous glacial lakes, showing strong agreement across the basin.">
+          <figcaption><span class="fignum r">Fig. 03</span><span class="cap"><em>Validation against ICIMOD.</em> Model-flagged high-risk lakes (red) against the independent field inventory (outlined). Where only one method flags a lake, the two approaches become complementary tools rather than rivals.</span></figcaption>
+        </figure>
+
+        <p class="sublabel m" style="margin-top:clamp(46px,7vw,72px)">Who is exposed</p>
+        <h3 class="sub" style="margin-top:6px">From hazard to people</h3>
+        <div class="prose" style="margin-top:22px">
+          <p>Risk is only meaningful once people enter the frame. Drawing a 5&nbsp;km danger zone around the 79 high-risk lakes captures roughly 10,808 residents — a deliberately conservative baseline, since outburst floods travel far beyond five kilometres down-valley. Exposure concentrates in the thin, high-mountain valleys threaded between the glaciers.</p>
+        </div>
+        <figure class="plate">
+          <img src="exp_basin.jpg" loading="lazy" width="1920" height="1228" alt="Population-exposure map of the Koshi Basin rendered as density hexagons within 5 km buffer danger zones around high-risk glacial lakes.">
+          <figcaption><span class="fignum m">Fig. 04</span><span class="cap"><em>Proximity exposure.</em> Population-density hexagons inside the 5&nbsp;km danger zone. A first, conservative estimate of who lives close enough to a high-risk lake to feel it.</span></figcaption>
+        </figure>
+
+        <div class="pair">
+          <figure class="plate">
+            <img src="exp_west.jpg" loading="lazy" width="1920" height="1450" alt="Western Koshi Basin population-exposure detail around the Tsho Rolpa area.">
+            <figcaption><span class="fignum m">Fig. 05</span><span class="cap"><em>Western basin.</em> Detail through the Rolwaling and Tama Kosi valleys.</span></figcaption>
+          </figure>
+          <figure class="plate">
+            <img src="exp_east.jpg" loading="lazy" width="1920" height="1450" alt="Eastern Koshi Basin population-exposure detail toward the Arun valley.">
+            <figcaption><span class="fignum m">Fig. 06</span><span class="cap"><em>Eastern basin.</em> Detail through the Arun's high catchments.</span></figcaption>
+          </figure>
+        </div>
+
+        <p class="sublabel" style="margin-top:clamp(46px,7vw,72px);color:var(--ink-faint)">The sharpest test</p>
+        <h3 class="sub" style="margin-top:6px">The same hazard, two very different consequences</h3>
+        <div class="prose" style="margin-top:22px">
+          <p>Proximity is a blunt instrument; a flood follows the valley, not a circle. Tracing the actual flow paths of the two marquee lakes turns the abstraction concrete — and reveals how much the downstream geography matters. Tsho Rolpa's corridor down the Rolwaling Khola threatens 9 settlements and about 1,134 residents. Imja's corridor crosses more villages — 20 — yet only ~224 modelled residents, because the upper Khumbu is sparsely and seasonally peopled.</p>
+          <p>Two Rank-I lakes, comparable hazards, and an order-of-magnitude gap in human consequence. That contrast is the argument for doing flow-path analysis at all.</p>
+        </div>
+        <div class="pair">
+          <figure class="plate">
+            <img src="tsho.jpg" loading="lazy" width="1920" height="1536" alt="Tsho Rolpa downstream flood-corridor map tracing the Rolwaling Khola into the Tama Kosi and the settlements at risk.">
+            <figcaption><span class="fignum r">Fig. 07</span><span class="cap"><em>Tsho Rolpa corridor.</em> 9 settlements, ~1,134 residents downstream.</span></figcaption>
+          </figure>
+          <figure class="plate">
+            <img src="imja.jpg" loading="lazy" width="1920" height="1536" alt="Imja Tsho downstream flood-corridor map tracing the Imja Khola into the Dudh Kosi and the settlements at risk.">
+            <figcaption><span class="fignum r">Fig. 08</span><span class="cap"><em>Imja corridor.</em> 20 settlements, ~224 modelled residents.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="note"><b>Method &amp; tools.</b> Multi-criteria scoring, proximity buffers, and river-network flow-path tracing in ArcGIS Pro, over ICIMOD glacial-lake and PDGL inventories, RGI glacier outlines, HydroRIVERS, and Kontur population data. Corridors are shown as screening buffers along the river network, not modelled inundation — a triage tool, not a substitute for hydrodynamic simulation.</div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WRITING ============ -->
+  <section class="panel" id="writing" role="tabpanel" aria-labelledby="tab-writing" tabindex="-1">
+    <div class="sheet">
+      <aside class="spine" aria-hidden="true">
+        <span class="idx">✍</span>
+        <span class="vrun">Writing samples</span>
+      </aside>
+      <div class="col">
+        <p class="kicker"><span class="dot"></span>Selected academic writing</p>
+        <h2 class="head" style="font-size:clamp(2rem,1.5rem + 3vw,3.6rem);max-width:18ch">Writing on climate, energy, and the coast</h2>
+        <p class="lead">Three research papers on environmental policy and impact assessment. Each opens as a PDF in a new tab.</p>
+
+        <div class="writing-list">
+          <a class="witem" href="roberts-bank-terminal-2-eia.pdf" target="_blank" rel="noopener">
+            <div class="wtype r">Environmental Impact Assessment</div>
+            <div class="wtitle">Roberts Bank Terminal 2 Expansion Project<span class="warr">↗</span></div>
+            <div class="wmeta">University of British Columbia · December 2024</div>
+            <p class="wdesc">Weighing a proposed Salish Sea container terminal against salmon habitat, Southern Resident Killer Whale recovery, and Douglas Treaty fishing rights.</p>
+          </a>
+          <a class="witem" href="country-profile-china.pdf" target="_blank" rel="noopener">
+            <div class="wtype m">Climate Policy Analysis</div>
+            <div class="wtitle">Country Profile: China<span class="warr">↗</span></div>
+            <div class="wmeta">University of British Columbia · February 2023</div>
+            <p class="wdesc">Tracking China's Nationally Determined Contributions against the Paris Agreement — and the just-transition and housing gaps that remain.</p>
+          </a>
+          <a class="witem" href="moving-to-renewable-energy.pdf" target="_blank" rel="noopener">
+            <div class="wtype t">Energy Policy</div>
+            <div class="wtitle">Moving to Renewable Energy<span class="warr">↗</span></div>
+            <div class="wmeta">University of Toronto · February 2022</div>
+            <p class="wdesc">A case for decentralizing Canada's power grid and building out region-matched renewable generation, research, and manufacturing.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="panel" id="about" role="tabpanel" aria-labelledby="tab-about" tabindex="-1">
+    <div class="sheet">
+      <aside class="spine" aria-hidden="true">
+        <span class="idx">↳</span>
+        <span class="vrun">About</span>
+      </aside>
+      <div class="col">
+        <p class="about-lead">A geographer whose work moves between the map and the field, usually somewhere high and cold.</p>
+        <div class="about-body">
+          <p>Zhenyi Tsai studies how a warming climate reshapes mountain water — and who bears the consequences downstream. The through-line is a habit of pairing spatial analysis with time actually spent on the ground: surveying glacial lakes on the Tibetan Plateau one season, then turning that fieldwork into the kind of GIS models that let an agency decide where to look first.</p>
+          <p>That fieldwork has been unusually hands-on. With Tsinghua University's Institute of Climate Change &amp; Sustainable Development, Zhenyi surveyed glacial lakes in Shannan Prefecture, assessing outburst-flood risk and tracing how climate-driven shifts in flow and sediment ripple through the basins that supply much of Asia's water — and working alongside Tibetan communities to fold local ecological knowledge into the analysis.</p>
+          <p>The following year brought a different kind of problem. As an agroecology coordinator for the Qilian County government in Qinghai, Zhenyi helped five Tibetan families move from nomadic pastoralism to settled agriculture — rebuilding thin highland soil into workable loam, designing drip irrigation for a water-scarce valley, and standing up the region's first biogas digester to turn organic waste into household fuel. Between the two sits a consistent interest in the practical, unglamorous work of adaptation.</p>
+          <p>Back in Vancouver, that shows up as teaching and organizing: building climate-justice curriculum as a UBC teaching assistant, translating climate-wellbeing research into classroom tools, and — separately — certifying the next set of first responders as a Red Cross first-aid instructor. Two degrees underpin it, a BA in Geography &amp; Environmental Science from UBC and earlier study in Political Science &amp; Environmental Studies at the University of Toronto.</p>
+        </div>
+
+        <div class="marginalia">
+          <div class="mnote"><span class="tick">Also</span><p>Head coach of <b>UBC Muay Thai</b> and past president of the <b>UBC Buddhist Student Association</b> — the discipline-and-stillness end of an otherwise field-heavy life.</p></div>
+          <div class="mnote"><span class="tick">On the ground</span><p>Certified <b>Emergency Medical Responder</b> and Wilderness First Responder — useful credentials when your study sites are days from a road.</p></div>
+          <div class="mnote"><span class="tick">Languages</span><p>Works in English and <b>Mandarin</b>, which is what made the Qinghai and Tibet fieldwork possible in the first place.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RÉSUMÉ ============ -->
+  <section class="panel" id="resume" role="tabpanel" aria-labelledby="tab-resume" tabindex="-1">
+    <div class="sheet">
+      <aside class="spine" aria-hidden="true">
+        <span class="idx">CV</span>
+        <span class="vrun">Résumé</span>
+      </aside>
+      <div class="col">
+        <div class="cv-top">
+          <h2 class="head" style="font-size:clamp(2rem,1.5rem + 2vw,3rem);margin:0">Résumé</h2>
+          <a class="btn" href="Zhenyi-Tsai-CV.pdf" download>
+            <svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><path d="M7.5 1v9M4 6.5l3.5 3.5L11 6.5M2 13h11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download PDF
+          </a>
+        </div>
+
+        <div class="cvblock">
+          <h4>Education</h4>
+          <div>
+            <div class="cvitem">
+              <div class="r1"><h5>University of British Columbia</h5><span class="when">2022 – 2026</span></div>
+              <p class="org">BA, Geography &amp; Environmental Science (Double Major) · Vancouver, B.C.</p>
+              <ul><li>Grade 3.7. Climate Emergency Advisory Board; Student Sustainability Council.</li></ul>
+            </div>
+            <div class="cvitem">
+              <div class="r1"><h5>University of Toronto</h5><span class="when">2020 – 2022</span></div>
+              <p class="org">Political Science &amp; Environmental Studies · Toronto, Ontario</p>
+              <ul><li>3.9 GPA · Dean's List; G20 Research Group.</li></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cvblock">
+          <h4>Research experience</h4>
+          <div>
+            <div class="cvitem">
+              <div class="r1"><h5>Agroecology &amp; Permaculture Coordinator</h5><span class="when">Mar – Nov 2025</span></div>
+              <p class="org">Qilian County Government, Agricultural Department · Qinghai, China</p>
+              <ul>
+                <li>Coordinated a permaculture initiative supporting five Tibetan families through the transition from nomadic pastoralism to settled agriculture, across five plots and three growing cycles.</li>
+                <li>Designed regenerative soil systems — composting, agroforestry, intercropping — converting marginal highland soil into fertile, yield-ready loam.</li>
+                <li>Implemented precision and drip irrigation in a water-scarce valley, and partitioned yak-grazing sectors to integrate livestock and cropland.</li>
+                <li>Partnered with local government to secure irrigation infrastructure and establish the region's first biogas digester for renewable household fuel.</li>
+              </ul>
+            </div>
+            <div class="cvitem">
+              <div class="r1"><h5>Field Research Assistant</h5><span class="when">Apr – Sep 2024</span></div>
+              <p class="org">Tsinghua University, Inst. of Climate Change &amp; Sustainable Development · Shannan Prefecture, T.A.R.</p>
+              <ul>
+                <li>Surveyed glacial lakes on the Tibetan Plateau, assessing outburst-flood risk and documenting potential impacts on ecosystems and communities.</li>
+                <li>Analyzed climate-driven shifts in flow and sediment transport across major Tibetan-Plateau river systems and their downstream effects.</li>
+                <li>Worked with Tibetan communities to integrate traditional ecological knowledge into risk-management and adaptation strategies.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cvblock">
+          <h4>Teaching &amp; assorted</h4>
+          <div>
+            <div class="cvitem">
+              <div class="r1"><h5>First Aid Instructor</h5><span class="when">May 2024 – Present</span></div>
+              <p class="org">Canadian Red Cross / Pacific First Aid · Vancouver, B.C.</p>
+              <ul><li>Instruct and assess Standard &amp; Emergency First Aid, CPR/AED (A, C, HCP), and Wilderness First Response against national certification standards.</li></ul>
+            </div>
+            <div class="cvitem">
+              <div class="r1"><h5>Climate Wellbeing Coordinator</h5><span class="when">Sep 2025 – May 2026</span></div>
+              <p class="org">UBC Sustainability Hub · Vancouver, B.C.</p>
+              <ul><li>Co-developed a curriculum toolkit translating climate-wellbeing research into classroom-ready strategies for instructors across disciplines.</li></ul>
+            </div>
+            <div class="cvitem">
+              <div class="r1"><h5>Teaching Assistant, Geography</h5><span class="when">May 2023 – May 2024</span></div>
+              <p class="org">UBC Geography Department · Vancouver, B.C.</p>
+              <ul><li>Built and delivered units on carbon accounting, life-cycle analysis, and climate-risk management; developed tutorial curriculum for GEOG 302: Climate Justice.</li></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cvblock">
+          <h4>Organizations</h4>
+          <div>
+            <div class="cvitem">
+              <div class="r1"><h5>Sustainability Consultant</h5><span class="when">2022 – 2025</span></div>
+              <p class="org">Climate Justice UBC · Vancouver, B.C.</p>
+              <ul><li>Built an integrated Microsoft Access + ArcGIS database tracking sustainability initiatives, and led community climate-literacy workshops.</li></ul>
+            </div>
+            <div class="cvitem">
+              <div class="r1"><h5>Student Sustainability Council</h5><span class="when">2022 – 2025</span></div>
+              <p class="org">University of British Columbia · Vancouver, B.C.</p>
+              <ul><li>Organized a cross-campus climate-action coalition and advanced sustainability into university operations and policy.</li></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cvblock">
+          <h4>Skills</h4>
+          <div>
+            <div class="taglist" style="margin-bottom:14px">
+              <span class="tag">ArcGIS Pro</span><span class="tag">GIS</span><span class="tag">SQL</span>
+              <span class="tag">Database analysis</span><span class="tag">Risk assessment</span><span class="tag">Carbon accounting</span>
+              <span class="tag">Adobe Creative Cloud</span><span class="tag">Soil &amp; sediment control</span><span class="tag">Electrofishing</span>
+            </div>
+            <div class="taglist">
+              <span class="tag cert">Emergency Medical Responder</span><span class="tag cert">Red Cross First Aid</span><span class="tag cert">Mandarin proficiency</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="panel" id="contact" role="tabpanel" aria-labelledby="tab-contact" tabindex="-1">
+    <div class="sheet">
+      <aside class="spine" aria-hidden="true">
+        <span class="idx">✎</span>
+        <span class="vrun">Contact</span>
+      </aside>
+      <div class="col">
+        <h2 class="contact-head">Let's find the water together</h2>
+        <p class="contact-lead">Open to research, GIS, and climate-risk work — and always up for a conversation about mountains, mapping, or fieldwork somewhere far from a road.</p>
+        <div class="contact-list">
+          <a class="crow" href="mailto:zhenyijr@gmail.com"><span class="k">Email</span><span class="v">zhenyijr@gmail.com</span></a>
+          <a class="crow" href="tel:+12369993919"><span class="k">Phone</span><span class="v">236&nbsp;999&nbsp;3919</span></a>
+          <div class="crow"><span class="k">Based in</span><span class="v">Vancouver, British Columbia</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot">
+      <span>© <span id="yr"></span> Zhenyi Tsai · Koshi Basin cartography created August 2026</span>
+      <a href="#work" data-tab="work">Back to top ↑</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js-anim');
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  var panels = {work:0,writing:0,about:0,resume:0,contact:0};
+  Object.keys(panels).forEach(function(id){ panels[id]=document.getElementById(id); });
+
+  function select(id, focusPanel){
+    if(!panels[id]) id='work';
+    tabs.forEach(function(t){
+      var on = t.getAttribute('data-tab')===id;
+      t.setAttribute('aria-selected', on?'true':'false');
+      t.tabIndex = on?0:-1;
+    });
+    Object.keys(panels).forEach(function(k){
+      panels[k].classList.toggle('is-active', k===id);
+    });
+    if(history.replaceState) history.replaceState(null,'','#'+id);
+    else location.hash = id;
+    if(focusPanel){ panels[id].focus({preventScroll:true}); }
+    window.scrollTo({top:0, behavior: focusPanel?'auto':'auto'});
+  }
+
+  // click (tabs + any element with data-tab, e.g. brand & footer)
+  document.querySelectorAll('[data-tab]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      var id = el.getAttribute('data-tab');
+      select(id, el.getAttribute('role')==='tab');
+    });
+  });
+
+  // keyboard: arrow navigation across the tablist
+  var list = document.querySelector('[role="tablist"]');
+  list.addEventListener('keydown', function(e){
+    var i = tabs.indexOf(document.activeElement);
+    if(i<0) return;
+    var n;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') n=(i+1)%tabs.length;
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp') n=(i-1+tabs.length)%tabs.length;
+    else if(e.key==='Home') n=0;
+    else if(e.key==='End') n=tabs.length-1;
+    else return;
+    e.preventDefault();
+    tabs[n].focus();
+    select(tabs[n].getAttribute('data-tab'), false);
+  });
+
+  // open to hash if present, and respond to later hash changes
+  var initial = (location.hash||'').replace('#','');
+  if(panels[initial] && initial!=='work'){ select(initial,false); }
+  window.addEventListener('hashchange', function(){
+    var id=(location.hash||'').replace('#','');
+    if(panels[id]) select(id,false);
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

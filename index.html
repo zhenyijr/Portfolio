@@ -3,26 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zhenyi Tsai — Geographer</title>
-<meta name="description" content="Zhenyi Tsai — geographer and environmental scientist. GIS, climate-risk mapping, and fieldwork across the Himalaya and Tibetan Plateau.">
+<title>Zhenyi Tsai — Ecological Geographer &amp; GIS Engineer</title>
+<meta name="description" content="Zhenyi Tsai — ecological geographer and GIS engineer. GIS, climate-risk mapping, and fieldwork across the Himalaya and Tibetan Plateau.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8E4DA'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%23C42A22' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E9EFE3'/%3E%3Cpath d='M16 17.5V29' stroke='%238C6D46' stroke-width='2'/%3E%3Ccircle cx='16' cy='10' r='6.6' fill='%232F7D4F'/%3E%3Ccircle cx='9.6' cy='15' r='4.3' fill='%232F7D4F' opacity='.85'/%3E%3Ccircle cx='22.4' cy='15' r='4.3' fill='%232F7D4F' opacity='.85'/%3E%3C/svg%3E">
 <style>
   :root{
-    --paper:#E8E4DA;        /* cool terrain-grey paper, from the hillshade basemap */
-    --paper-2:#DFDACD;      /* inset surface */
-    --paper-3:#D4CEBE;      /* deeper inset / rules */
-    --ink:#23211B;          /* map-label ink */
-    --ink-soft:#5B564A;     /* secondary text */
-    --ink-faint:#8A8474;    /* captions, meta */
-    --risk:#C42A22;         /* High-risk crimson — the one bold accent */
-    --risk-deep:#9E2019;
-    --glacier:#2E7C6E;      /* glacier teal — links, quiet accents */
-    --mauve:#6E5F86;        /* population-density mauve — exposure chapter */
-    --amber:#CF8A1E;        /* medium-risk amber — legend dots only */
-    --line:#C4BDAC;         /* hairlines */
+    --paper:#E9EFE3;        /* soft sage paper */
+    --paper-2:#DEE6D3;      /* inset surface */
+    --paper-3:#D1DCC3;      /* deeper inset / rules */
+    --ink:#202A1C;          /* deep forest-green ink */
+    --ink-soft:#4F5C43;     /* secondary text */
+    --ink-faint:#7C8A6C;    /* captions, meta */
+    --risk:#2F7D4F;         /* leaf green — the one bold accent */
+    --risk-deep:#1F5C38;
+    --glacier:#1F7A6C;      /* deep teal-green — links, quiet accents */
+    --mauve:#8C6D46;        /* bark brown — exposure chapter */
+    --amber:#C98A2E;        /* medium-risk amber — legend dots only */
+    --line:#BEC9AE;         /* hairlines */
     --measure:66ch;
     --spine:96px;
   }
@@ -147,6 +147,10 @@
   /* ---------- Figures / plates ---------- */
   figure.plate{margin:clamp(40px,7vw,84px) 0 0}
   .plate img{display:block;width:100%;height:auto;border:1px solid var(--line);background:var(--paper-2)}
+  .plate.embed iframe{
+    display:block;width:100%;height:clamp(380px,62vw,640px);
+    border:1px solid var(--line);background:var(--paper-2);
+  }
   .plate figcaption{display:flex;gap:16px;margin-top:14px;max-width:var(--measure)}
   .fignum{
     flex:none;font-family:"Hanken Grotesk",system-ui,sans-serif;font-weight:700;
@@ -291,13 +295,15 @@
   <header class="masthead">
     <a class="brand" href="#work" data-tab="work" aria-label="Zhenyi Tsai — home">
       <svg class="mark" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
-        <circle cx="15" cy="15" r="11" fill="none" stroke="var(--risk)" stroke-width="2.4"/>
-        <path d="M15 4 L15 26 M4 15 L26 15" stroke="var(--ink)" stroke-width="1.1" opacity=".55"/>
-        <circle cx="15" cy="15" r="2.4" fill="var(--risk)"/>
+        <path d="M15 16.5V27" stroke="var(--mauve)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M15 27c0-1.6-1.3-2.6-3-2.6M15 27c0-2.2 1.8-3.6 4-3.6" stroke="var(--mauve)" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="15" cy="9.5" r="6.3" fill="var(--risk)"/>
+        <circle cx="9.2" cy="14" r="4.1" fill="var(--risk)" opacity=".85"/>
+        <circle cx="20.8" cy="14" r="4.1" fill="var(--risk)" opacity=".85"/>
       </svg>
       <span>
         <h1>Zhenyi Tsai</h1>
-        <span class="role">Geographer and environmental scientist</span>
+        <span class="role">Ecological Geographer &amp; GIS Engineer</span>
       </span>
     </a>
     <nav class="tabs" role="tablist" aria-label="Sections">
@@ -319,6 +325,23 @@
       </aside>
       <div class="col">
 
+        <p class="kicker"><span class="dot"></span>Disaster-response cartography, Gyirong–Nepal flood corridor</p>
+        <h2 class="head">A live 3D terrain scene of the Bhote Koshi flood corridor</h2>
+        <p class="lead">An interactive, self-hosted 3D scene of the Gyirong (སྐྱིད་གྲོང་རྫོང་།)–Nepal border corridor, built to map the 26 August 2026 Bhote Koshi flash flood in three dimensions. Drag to orbit, scroll to zoom, use WASD or the arrow keys to walk the corridor, and click any settlement for dated situation-report updates.</p>
+
+        <figure class="plate embed">
+          <iframe src="https://zhenyijr.github.io/3D-Projection-of-Gyirong/index.html" loading="lazy" title="Interactive 3D scene of the Gyirong–Nepal flood corridor" allow="fullscreen"></iframe>
+          <figcaption><span class="fignum r">Fig. 01</span><span class="cap"><em>Interactive scene.</em> Live embed — drag to orbit, scroll to zoom, WASD/arrows to pan, Q/E to rotate. Click a settlement label or legend item for dated updates sourced from official situation reports. <a href="https://zhenyijr.github.io/3D-Projection-of-Gyirong/index.html" target="_blank" rel="noopener">Open full-screen ↗</a></span></figcaption>
+        </figure>
+
+        <div class="prose">
+          <p class="drop">On 26 August 2026, a temporary ice-rock dam near Deding in the Langtang region breached, sending a debris-laden flash flood down the Bhote Koshi–Trishuli corridor into Nepal's Rasuwa District — destroying the Gyirong–Rasuwagadhi border crossing and more than 30 bridges along the way. This scene reconstructs the corridor in three dimensions from real elevation data, marks the flood's precise point of origin, animates its downstream flow direction, and anchors dated, source-cited updates to each affected settlement.</p>
+          <p>The terrain itself is a true height-mapped mesh — not a draped flat image — built client-side from a Copernicus DEM encoded as a Terrain-RGB PNG. Flood extent and damage-buffer polygons, the origin marker, and the animated flow-direction arrows sit on top of that mesh; a collapsible legend links each affected settlement to a scrollable popup of dated updates drawn from NDRRMA, IRDR, OCHA and UNOSAT situation reporting.</p>
+        </div>
+
+        <div class="note"><b>Method &amp; tools.</b> Three.js terrain mesh built in-browser from a Terrain-RGB-encoded Copernicus DEM (GLO-30); Python (rasterio, numpy, Pillow) for DEM mosaicking and encoding. No build step or backend — fully static, deployed via GitHub Pages. <a href="https://github.com/zhenyijr/3D-Projection-of-Gyirong" target="_blank" rel="noopener">View source ↗</a></div>
+
+        <p class="sublabel r" style="margin-top:clamp(56px,9vw,96px)">Project 02 — Glacial hazard screening</p>
         <p class="kicker"><span class="dot"></span>Glacial lake outburst flood screening, Nepal's Koshi Basin</p>
         <h2 class="head">Mapping who lives in the path of a glacial flood</h2>
         <p class="lead">A screening model for glacial lake outburst floods across Nepal's Koshi Basin — narrowing
@@ -334,7 +357,7 @@
 
         <figure class="plate">
           <img src="risk.jpg" width="1920" height="1228" alt="Risk map of the Koshi Basin showing roughly 2,000 glacial lakes scored for outburst-flood risk, with high-risk lakes in red clustered along the glaciated spine of the Himalaya.">
-          <figcaption><span class="fignum r">Fig. 01</span><span class="cap"><em>The screening model.</em> Each lake scored on dam type, surface area, and proximity to glacier ice — the three factors most tied to historical outburst events. High-risk lakes cluster along the glaciated spine, in the Everest, Rolwaling, and Arun sub-basins.</span></figcaption>
+          <figcaption><span class="fignum r">Fig. 02</span><span class="cap"><em>The screening model.</em> Each lake scored on dam type, surface area, and proximity to glacier ice — the three factors most tied to historical outburst events. High-risk lakes cluster along the glaciated spine, in the Everest, Rolwaling, and Arun sub-basins.</span></figcaption>
         </figure>
 
         <div class="prose">
@@ -346,7 +369,7 @@
         <h3 class="sub">A basin of extremes, from Everest to the plains</h3>
         <figure class="plate">
           <img src="overview.jpg" loading="lazy" width="1920" height="1650" alt="Overview map of the Koshi Basin spanning from the high Himalaya into the Bihar plains, showing population density, glacier extent, recorded GLOF events from 1920 to 2020, and the 5 km buffer danger zone.">
-          <figcaption><span class="fignum t">Fig. 02</span><span class="cap"><em>Basin overview.</em> The Koshi drains from the highest ground on earth into some of the most densely settled plains in South Asia. Recorded outburst events from 1920–2020 anchor the model in a real history of failure.</span></figcaption>
+          <figcaption><span class="fignum t">Fig. 03</span><span class="cap"><em>Basin overview.</em> The Koshi drains from the highest ground on earth into some of the most densely settled plains in South Asia. Recorded outburst events from 1920–2020 anchor the model in a real history of failure.</span></figcaption>
         </figure>
 
         <p class="sublabel r" style="margin-top:clamp(46px,7vw,72px)">Does the model hold up?</p>
@@ -356,7 +379,7 @@
         </div>
         <figure class="plate">
           <img src="validation.jpg" loading="lazy" width="1920" height="1228" alt="Validation map overlaying the model's high-risk lakes on ICIMOD's inventory of potentially dangerous glacial lakes, showing strong agreement across the basin.">
-          <figcaption><span class="fignum r">Fig. 03</span><span class="cap"><em>Validation against ICIMOD.</em> Model-flagged high-risk lakes (red) against the independent field inventory (outlined). Where only one method flags a lake, the two approaches become complementary tools rather than rivals.</span></figcaption>
+          <figcaption><span class="fignum r">Fig. 04</span><span class="cap"><em>Validation against ICIMOD.</em> Model-flagged high-risk lakes (red) against the independent field inventory (outlined). Where only one method flags a lake, the two approaches become complementary tools rather than rivals.</span></figcaption>
         </figure>
 
         <p class="sublabel m" style="margin-top:clamp(46px,7vw,72px)">Who is exposed</p>
@@ -366,17 +389,17 @@
         </div>
         <figure class="plate">
           <img src="exp_basin.jpg" loading="lazy" width="1920" height="1228" alt="Population-exposure map of the Koshi Basin rendered as density hexagons within 5 km buffer danger zones around high-risk glacial lakes.">
-          <figcaption><span class="fignum m">Fig. 04</span><span class="cap"><em>Proximity exposure.</em> Population-density hexagons inside the 5&nbsp;km danger zone. A first, conservative estimate of who lives close enough to a high-risk lake to feel it.</span></figcaption>
+          <figcaption><span class="fignum m">Fig. 05</span><span class="cap"><em>Proximity exposure.</em> Population-density hexagons inside the 5&nbsp;km danger zone. A first, conservative estimate of who lives close enough to a high-risk lake to feel it.</span></figcaption>
         </figure>
 
         <div class="pair">
           <figure class="plate">
             <img src="exp_west.jpg" loading="lazy" width="1920" height="1450" alt="Western Koshi Basin population-exposure detail around the Tsho Rolpa area.">
-            <figcaption><span class="fignum m">Fig. 05</span><span class="cap"><em>Western basin.</em> Detail through the Rolwaling and Tama Kosi valleys.</span></figcaption>
+            <figcaption><span class="fignum m">Fig. 06</span><span class="cap"><em>Western basin.</em> Detail through the Rolwaling and Tama Kosi valleys.</span></figcaption>
           </figure>
           <figure class="plate">
             <img src="exp_east.jpg" loading="lazy" width="1920" height="1450" alt="Eastern Koshi Basin population-exposure detail toward the Arun valley.">
-            <figcaption><span class="fignum m">Fig. 06</span><span class="cap"><em>Eastern basin.</em> Detail through the Arun's high catchments.</span></figcaption>
+            <figcaption><span class="fignum m">Fig. 07</span><span class="cap"><em>Eastern basin.</em> Detail through the Arun's high catchments.</span></figcaption>
           </figure>
         </div>
 
@@ -389,11 +412,11 @@
         <div class="pair">
           <figure class="plate">
             <img src="tsho.jpg" loading="lazy" width="1920" height="1536" alt="Tsho Rolpa downstream flood-corridor map tracing the Rolwaling Khola into the Tama Kosi and the settlements at risk.">
-            <figcaption><span class="fignum r">Fig. 07</span><span class="cap"><em>Tsho Rolpa corridor.</em> 9 settlements, ~1,134 residents downstream.</span></figcaption>
+            <figcaption><span class="fignum r">Fig. 08</span><span class="cap"><em>Tsho Rolpa corridor.</em> 9 settlements, ~1,134 residents downstream.</span></figcaption>
           </figure>
           <figure class="plate">
             <img src="imja.jpg" loading="lazy" width="1920" height="1536" alt="Imja Tsho downstream flood-corridor map tracing the Imja Khola into the Dudh Kosi and the settlements at risk.">
-            <figcaption><span class="fignum r">Fig. 08</span><span class="cap"><em>Imja corridor.</em> 20 settlements, ~224 modelled residents.</span></figcaption>
+            <figcaption><span class="fignum r">Fig. 09</span><span class="cap"><em>Imja corridor.</em> 20 settlements, ~224 modelled residents.</span></figcaption>
           </figure>
         </div>
 

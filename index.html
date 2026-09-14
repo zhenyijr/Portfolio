@@ -124,13 +124,11 @@
     font-variation-settings:"opsz" 144,"wght" 430,"SOFT" 0,"WONK" 1;
   }
   .lead{max-width:var(--measure);color:var(--ink-soft);font-size:clamp(1.1rem,1rem + .5vw,1.32rem);line-height:1.55}
-  .lead .circled{position:relative;white-space:nowrap}
-  .lead .circled svg{position:absolute;left:-8px;right:-8px;top:-6px;width:calc(100% + 16px);height:calc(100% + 12px);overflow:visible;pointer-events:none}
-  .lead .circled path{fill:none;stroke:var(--risk);stroke-width:2.4;stroke-linecap:round}
-  @media (prefers-reduced-motion:no-preference){
-    .js-anim .lead .circled path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1s ease .5s forwards}
-    @keyframes draw{to{stroke-dashoffset:0}}
+  .lead .circled{
+    position:relative;white-space:nowrap;
+    text-decoration:underline;text-decoration-color:var(--risk);text-decoration-thickness:2.4px;text-underline-offset:.2em;
   }
+  .lead .circled svg{display:none}
 
   /* stats */
   .stats{display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,52px);margin:38px 0 12px;padding-top:26px;border-top:1px solid var(--line)}
@@ -396,20 +394,6 @@
 
         <div class="note"><b>Method &amp; tools.</b> Three.js terrain mesh built in-browser from a Terrain-RGB-encoded Copernicus DEM (GLO-30); Python (rasterio, numpy, Pillow) for DEM mosaicking and encoding. No build step or backend — fully static, deployed via GitHub Pages. <a href="https://github.com/zhenyijr/3D-Projection-of-Gyirong" target="_blank" rel="noopener">View source ↗</a></div>
 
-        <section class="project-embed" id="project-yarlung">
-          <h2>Yarlung Tsangpo Hydropower Siting Analysis</h2>
-          <p>An interactive multi-criteria model predicting optimal hydropower dam sites along the Yarlung Tsangpo's Great Bend, validated against the approved Medog megaproject. Click any river reach to see its suitability scores.</p>
-
-          <iframe
-            src="https://ztgis.maps.arcgis.com/apps/instant/basic/index.html?appid=25003fb134ae48849024f3c1d43d2469"
-            width="100%" height="600"
-            frameborder="0" style="border:1px solid #ccc; border-radius:8px;"
-            allowfullscreen loading="lazy" title="Yarlung Tsangpo hydropower siting analysis">
-          </iframe>
-
-          <p><a href="https://ztgis.maps.arcgis.com/apps/instant/basic/index.html?appid=25003fb134ae48849024f3c1d43d2469" target="_blank" rel="noopener">Open the full app ↗</a></p>
-        </section>
-
         <p class="sublabel r" id="project-koshi" style="margin-top:clamp(56px,9vw,96px)">Project 02 — Glacial hazard screening</p>
         <p class="kicker"><span class="dot"></span>Glacial lake outburst flood screening, Nepal's Koshi Basin</p>
         <h2 class="head">Mapping who lives in the path of a glacial flood</h2>
@@ -490,6 +474,20 @@
         </div>
 
         <div class="note"><b>Method &amp; tools.</b> Multi-criteria scoring, proximity buffers, and river-network flow-path tracing in ArcGIS Pro, over ICIMOD glacial-lake and PDGL inventories, RGI glacier outlines, HydroRIVERS, and Kontur population data. Corridors are shown as screening buffers along the river network, not modelled inundation — a triage tool, not a substitute for hydrodynamic simulation.</div>
+
+        <section class="project-embed" id="project-yarlung">
+          <h2>Yarlung Tsangpo Hydropower Siting Analysis</h2>
+          <p>An interactive multi-criteria model predicting optimal hydropower dam sites along the Yarlung Tsangpo's Great Bend, validated against the approved Medog megaproject. Click any river reach to see its suitability scores.</p>
+
+          <iframe
+            src="https://ztgis.maps.arcgis.com/apps/instant/basic/index.html?appid=25003fb134ae48849024f3c1d43d2469"
+            width="100%" height="600"
+            frameborder="0" style="border:1px solid #ccc; border-radius:8px;"
+            allowfullscreen loading="lazy" title="Yarlung Tsangpo hydropower siting analysis">
+          </iframe>
+
+          <p><a href="https://ztgis.maps.arcgis.com/apps/instant/basic/index.html?appid=25003fb134ae48849024f3c1d43d2469" target="_blank" rel="noopener">Open the full app ↗</a></p>
+        </section>
 
         <p class="sublabel t" id="project-noaa" style="margin-top:clamp(72px,10vw,120px)">Project 03 — Data engineering</p>
         <p class="kicker"><span class="dot"></span>NOAA Storm Events data pipeline</p>

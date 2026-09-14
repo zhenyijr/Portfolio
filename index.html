@@ -240,6 +240,9 @@
   }
   .about-body{max-width:var(--measure)}
   .about-body p{margin:0 0 1.1em}
+  .about-portrait{max-width:620px;margin:clamp(24px,4vw,42px) 0 clamp(32px,5vw,54px)}
+  .about-portrait img{display:block;width:100%;height:auto;border:1px solid var(--line);background:var(--paper-2)}
+  .about-portrait figcaption{margin-top:10px;font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:.76rem;line-height:1.45;color:var(--ink-faint)}
   .marginalia{margin:clamp(40px,6vw,60px) 0 0;display:grid;gap:22px}
   .mnote{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;max-width:var(--measure)}
   .mnote .tick{
@@ -584,6 +587,10 @@ ogr2ogr -f Parquet -overwrite \
       </aside>
       <div class="col">
         <p class="about-lead">A Canadian-born Chinese Geographer whose work moves between the map and the field, usually high and cold.</p>
+        <figure class="about-portrait">
+          <img src="meandpanda.jpeg" width="1536" height="2048" alt="Zhenyi Tsai with a red panda at a wildlife sanctuary">
+          <figcaption>Somewhere between fieldwork and the wild: Zhenyi with a red panda.</figcaption>
+        </figure>
         <div class="about-body">
           <p>We have failed to avoid crossing the 1.5°C global warming threshold, bringing consequential impacts that humanity has yet to fathom. Yet, confronted with this reality, I refuse to stand idle as our world, and all who inhabit it, face uncertainty and fear.</p>
           <p>Although my broader research focuses on climate change, ecology, and environmental conservation, my recent work has examined how a warming climate reshapes mountain glaciers and who bears the consequences. Recent research has paired spatial analysis with time on the ground: surveying glacial lakes on the Tibetan Plateau one season, then turning that fieldwork into GIS models that provide agencies with detailed analysis and web programs for project planning or continued development.</p>

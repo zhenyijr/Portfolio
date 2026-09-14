@@ -316,6 +316,18 @@
   .foot a{color:var(--glacier);text-decoration:none}
   .foot a:hover{text-decoration:underline}
 
+  .back-to-top{
+    position:fixed;right:20px;bottom:22px;z-index:20;
+    display:inline-flex;align-items:center;justify-content:center;
+    width:46px;height:46px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(233,239,227,0.9);color:var(--ink);
+    box-shadow:0 8px 20px rgba(32,42,28,0.12);text-decoration:none;
+    opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .back-to-top.visible{opacity:1;visibility:visible;transform:none}
+  .back-to-top:hover{background:var(--paper-2);border-color:var(--ink-faint)}
+  .back-to-top:focus-visible{outline:2.5px solid var(--glacier);outline-offset:3px}
+
   /* ---------- Responsive ---------- */
   @media (max-width:720px){
     .sheet{grid-template-columns:1fr}
@@ -725,11 +737,31 @@ ogr2ogr -f Parquet -overwrite \
     </div>
   </footer>
 
+  <a href="#work" class="back-to-top" aria-label="Back to top">↑</a>
+
 </div>
 
 <script>
 (function(){
   document.documentElement.classList.add('js-anim');
+
+  var backToTop = document.querySelector('.back-to-top');
+  var toggleBackToTop = function(){
+    if (!backToTop) return;
+    if (window.scrollY > 260) backToTop.classList.add('visible');
+    else backToTop.classList.remove('visible');
+  };
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  toggleBackToTop();
+
+  if (backToTop) {
+    backToTop.addEventListener('click', function(e){
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (history.replaceState) history.replaceState(null, '', '#work');
+    });
+  }
+
   var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
   var panels = {work:0,writing:0,about:0,resume:0,contact:0};
   Object.keys(panels).forEach(function(id){ panels[id]=document.getElementById(id); });

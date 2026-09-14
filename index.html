@@ -189,6 +189,34 @@
   }
   .note b{color:var(--ink);font-weight:600}
 
+  .project-index{
+    margin:0 0 clamp(34px,6vw,56px);
+    border:1px solid var(--line);background:rgba(255,255,255,0.25);
+    padding:18px 20px 14px;max-width:var(--measure)
+  }
+  .project-index-header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    margin-bottom:12px;font-family:"Hanken Grotesk",system-ui,sans-serif;
+  }
+  .project-index-header span{font-size:.72rem;font-weight:700;letter-spacing:.03em;color:var(--ink-faint);text-transform:uppercase}
+  .project-links{display:flex;flex-wrap:wrap;gap:8px}
+  .project-links a{
+    display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:.78rem;font-weight:600;color:var(--ink);background:var(--paper-2);
+    border:1px solid var(--line);padding:7px 10px;border-radius:999px;
+    transition:all .18s ease
+  }
+  .project-links a:hover{background:var(--paper-3);border-color:var(--ink-faint)}
+  .project-links a:focus-visible{outline:2.5px solid var(--glacier);outline-offset:3px}
+
+  .project-embed{margin-top:clamp(40px,7vw,72px);padding-top:clamp(18px,3vw,26px);border-top:1px solid var(--line)}
+  .project-embed h2{margin:0 0 10px;max-width:20ch;line-height:1.12;letter-spacing:-.01em;font-size:clamp(1.75rem,1.35rem + 1.4vw,2.5rem)}
+  .project-embed p{max-width:var(--measure);color:var(--ink-soft);margin:0 0 18px}
+  .project-embed iframe{display:block;width:100%;min-height:520px;border:1px solid var(--line);border-radius:10px;background:var(--paper-2)}
+  .project-embed a{color:var(--glacier);text-decoration:none}
+  .project-embed a:hover{text-decoration:underline}
+
   /* ---------- Project code / repository panel ---------- */
   .repo-link{margin-top:clamp(34px,6vw,56px);display:inline-flex}
   .code-panel{margin:clamp(34px,6vw,56px) 0 0;max-width:var(--measure)}
@@ -334,6 +362,17 @@
 
   <!-- ============ WORK ============ -->
   <section class="panel is-active" id="work" role="tabpanel" aria-labelledby="tab-work" tabindex="-1">
+    <div class="project-index" aria-label="Project navigation">
+      <div class="project-index-header">
+        <span>Project index</span>
+      </div>
+      <div class="project-links">
+        <a href="#project-gyirong">Gyirong flood corridor</a>
+        <a href="#project-yarlung">Yarlung siting analysis</a>
+        <a href="#project-koshi">Koshi basin risk</a>
+        <a href="#project-noaa">NOAA storm pipeline</a>
+      </div>
+    </div>
     <div class="sheet">
       <aside class="spine" aria-hidden="true">
         <span class="idx">01 — 04</span>
@@ -341,7 +380,7 @@
       </aside>
       <div class="col">
 
-        <p class="kicker"><span class="dot"></span>Disaster-response cartography, Gyirong–Nepal flood corridor</p>
+        <p class="kicker" id="project-gyirong"><span class="dot"></span>Disaster-response cartography, Gyirong–Nepal flood corridor</p>
         <h2 class="head">A live 3D terrain scene of the Bhote Koshi flood corridor</h2>
         <p class="lead">An interactive, self-hosted 3D scene of the Gyirong (སྐྱིད་གྲོང་རྫོང་།)–Nepal border corridor, built to map the 26 August 2026 Bhote Koshi flash flood in three dimensions. Drag to orbit, scroll to zoom, use WASD or the arrow keys to walk the corridor, and click any settlement for dated situation-report updates.</p>
 
@@ -357,7 +396,21 @@
 
         <div class="note"><b>Method &amp; tools.</b> Three.js terrain mesh built in-browser from a Terrain-RGB-encoded Copernicus DEM (GLO-30); Python (rasterio, numpy, Pillow) for DEM mosaicking and encoding. No build step or backend — fully static, deployed via GitHub Pages. <a href="https://github.com/zhenyijr/3D-Projection-of-Gyirong" target="_blank" rel="noopener">View source ↗</a></div>
 
-        <p class="sublabel r" style="margin-top:clamp(56px,9vw,96px)">Project 02 — Glacial hazard screening</p>
+        <section class="project-embed" id="project-yarlung">
+          <h2>Yarlung Tsangpo Hydropower Siting Analysis</h2>
+          <p>An interactive multi-criteria model predicting optimal hydropower dam sites along the Yarlung Tsangpo's Great Bend, validated against the approved Medog megaproject. Click any river reach to see its suitability scores.</p>
+
+          <iframe
+            src="https://ztgis.maps.arcgis.com/apps/instant/basic/index.html?appid=25003fb134ae48849024f3c1d43d2469"
+            width="100%" height="600"
+            frameborder="0" style="border:1px solid #ccc; border-radius:8px;"
+            allowfullscreen loading="lazy" title="Yarlung Tsangpo hydropower siting analysis">
+          </iframe>
+
+          <p><a href="https://ztgis.maps.arcgis.com/apps/instant/basic/index.html?appid=25003fb134ae48849024f3c1d43d2469" target="_blank" rel="noopener">Open the full app ↗</a></p>
+        </section>
+
+        <p class="sublabel r" id="project-koshi" style="margin-top:clamp(56px,9vw,96px)">Project 02 — Glacial hazard screening</p>
         <p class="kicker"><span class="dot"></span>Glacial lake outburst flood screening, Nepal's Koshi Basin</p>
         <h2 class="head">Mapping who lives in the path of a glacial flood</h2>
         <p class="lead">A screening model for glacial lake outburst floods across Nepal's Koshi Basin — narrowing
@@ -438,7 +491,7 @@
 
         <div class="note"><b>Method &amp; tools.</b> Multi-criteria scoring, proximity buffers, and river-network flow-path tracing in ArcGIS Pro, over ICIMOD glacial-lake and PDGL inventories, RGI glacier outlines, HydroRIVERS, and Kontur population data. Corridors are shown as screening buffers along the river network, not modelled inundation — a triage tool, not a substitute for hydrodynamic simulation.</div>
 
-        <p class="sublabel t" style="margin-top:clamp(72px,10vw,120px)">Project 03 — Data engineering</p>
+        <p class="sublabel t" id="project-noaa" style="margin-top:clamp(72px,10vw,120px)">Project 03 — Data engineering</p>
         <p class="kicker"><span class="dot"></span>NOAA Storm Events data pipeline</p>
         <h2 class="head">NOAA Storms</h2>
         <p class="lead">A small, one-command Bash pipeline that pulls a year of NOAA Storm Events data, converts it to GeoParquet, and lands it ready for DuckDB or QGIS. The whole pipeline runs in about 90 seconds.</p>
